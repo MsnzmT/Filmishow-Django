@@ -25,6 +25,9 @@ class Film(models.Model):
     yearOfPublication = models.DateField()
     photo = models.ImageField()
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Comment(models.Model):
     commenter = models.OneToOneField(User, on_delete=models.CASCADE)
