@@ -65,3 +65,11 @@ def upload_film(request):
             return HttpResponse('You should be admin !')
         return HttpResponse('You should login first !')
     return HttpResponse('Request method not allowed !')
+
+
+@csrf_exempt
+def show_all_film(request):
+    if request.method == 'GET':
+        films = Film.objects.all()
+        return films
+    return HttpResponse('Request method not allowed !')
