@@ -9,8 +9,18 @@ class Profile(models.Model):
 
 
 class Film(models.Model):
-    #name
-    #summary
-    #genre
-    #director
-
+    GENRE_CHOICES = (('H', 'Horror'),
+                     ('D', 'Drum'),
+                     ('A', 'Action'),
+                     ('C', 'Comedy'),
+                     ('F', 'Fantasy'))
+    # - - - - - Attributes - - - - -
+    name = models.CharField(max_length=30)
+    summary = models.TextField(max_length=200)
+    genre = models.CharField(max_length=1, choices=GENRE_CHOICES)
+    director = models.CharField(max_length=20)
+    actors = models.CharField()
+    score = models.FloatField()
+    country = models.CharField(max_length=100)
+    yearOfPublication = models.DateField()
+    photo = models.ImageField()
