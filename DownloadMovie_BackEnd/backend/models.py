@@ -24,3 +24,9 @@ class Film(models.Model):
     country = models.CharField(max_length=100)
     yearOfPublication = models.DateField()
     photo = models.ImageField()
+
+
+class Comment(models.Model):
+    commenter = models.OneToOneField(User, on_delete=models.CASCADE)
+    text = models.TextField()
+    date = models.DateField()
