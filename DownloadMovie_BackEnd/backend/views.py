@@ -70,6 +70,6 @@ def upload_film(request):
 @csrf_exempt
 def show_all_film(request):
     if request.method == 'GET':
-        films = Film.objects.all()
+        films = list(Film.objects.all().values_list('id', 'name', 'photo'))
         return films
     return HttpResponse('Request method not allowed !')
