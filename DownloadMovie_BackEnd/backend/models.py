@@ -19,7 +19,7 @@ class Film(models.Model):
     summary = models.TextField(max_length=200)
     genre = models.CharField(max_length=1, choices=GENRE_CHOICES)
     director = models.CharField(max_length=20)
-    actors = models.CharField()
+    actors = models.CharField(max_length=500)
     score = models.FloatField()
     country = models.CharField(max_length=100)
     yearOfPublication = models.DateField()
