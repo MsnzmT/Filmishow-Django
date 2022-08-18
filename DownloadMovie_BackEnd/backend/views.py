@@ -1,7 +1,6 @@
 from django.http.response import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login as lgn
-
+from django.contrib.auth import authenticate, login as lgn, logout as lgout
 from .forms import SignUpForm
 
 
@@ -31,4 +30,18 @@ def login(request):
             lgn(request, user)
             return HttpResponse('Login Successfully')
         else:
-            return HttpResponse('Login Failed')
+            return HttpResponse('Login Failed - Your password or username is wrong')
+    else:
+        return HttpResponse('request method not allowed !')
+
+
+@csrf_exempt
+def logout(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            lgout(request)
+            return HttpResponse('You were loged out seccessfully !')
+        return HttpResponse('You should login first !')
+    return HttpResponse('Request method not allowed !')
+
+
