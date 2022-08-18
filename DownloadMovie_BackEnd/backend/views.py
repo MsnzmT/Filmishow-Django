@@ -2,6 +2,7 @@ from django.http.response import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login as lgn, logout as lgout
 from .forms import SignUpForm
+from .models import Film
 
 
 @csrf_exempt
@@ -45,3 +46,22 @@ def logout(request):
     return HttpResponse('Request method not allowed !')
 
 
+@csrf_exempt
+def upload_film(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            if request.user.is_superuser:
+                film = Film()
+                film.name = request.POST.get('name')
+                film.summary = request.POST.get('summary')
+                film.genre = request.POST.get('genre')
+                film.director = request.POST.get('director')
+                film.actors = request.POST.get('actors')
+                film.country = request.POST.get('country')
+                film.yearOfPublication = request.POST.get('yearOfPublication')
+                film.photo = request.POST.get('photo')
+                film.save()
+                return HttpResponse('Film uploaded successfully !')
+            return HttpResponse('You should be admin !')
+        return HttpResponse('You should login first !')
+    return HttpResponse('Request method not allowed !')
