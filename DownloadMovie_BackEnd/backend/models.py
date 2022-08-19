@@ -1,13 +1,13 @@
 import datetime
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    country = models.CharField(max_length=20)
-    phone_number = models.CharField(max_length=13)
+class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)
+    country = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=50, blank=True, null=True)
 
 
 class Film(models.Model):
@@ -32,7 +32,7 @@ class Film(models.Model):
 
 
 class Comment(models.Model):
-    commenter = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    commenter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     film = models.ForeignKey(Film, on_delete=models.CASCADE, null=True)
     text = models.TextField()
     date = models.DateField(default=datetime.date.today())

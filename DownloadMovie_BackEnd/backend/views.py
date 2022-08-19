@@ -1,21 +1,21 @@
 from django.http.response import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login as lgn, logout as lgout
-from .forms import SignUpForm
-from .models import Film, Comment
+from .models import *
 from django.contrib.auth.decorators import permission_required
 
 
 @csrf_exempt
 def signup(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
-
-        if form.is_valid():
-            form.save()
-            return HttpResponse('User created successfully!')
-
-        return HttpResponse(f"{form.errors}")
+        username = request.POST.get('username')
+        pass1 = request.POST.get('password1')
+        pass2 = request.POST.get('password2')
+        email = request.POST.get('email')
+        if pass2 != pass1:
+            return HttpResponse('Entered passwords are not identical')
+        CustomUser.objects.create_user(username=username, password=pass1, email=email)
+        return HttpResponse('User created successfully!')
 
     return HttpResponse('Only post method allowed!')
 
