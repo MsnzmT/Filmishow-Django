@@ -35,7 +35,7 @@ class Comment(models.Model):
     commenter = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     film = models.ForeignKey(Film, on_delete=models.CASCADE, null=True)
     text = models.TextField()
-    date = models.DateField(default=datetime.date.today())
+    date = models.DateField(default=datetime.date.today(), null=True)
 
     def __str__(self):
         return f'{self.commenter} comments on {self.film}'

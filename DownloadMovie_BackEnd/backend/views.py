@@ -2,7 +2,7 @@ from django.http.response import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login as lgn, logout as lgout
 from .forms import SignUpForm
-from .models import Film
+from .models import Film, Comment
 
 
 @csrf_exempt
@@ -70,6 +70,25 @@ def upload_film(request):
 @csrf_exempt
 def show_all_film(request):
     if request.method == 'GET':
-        films = list(Film.objects.all().values_list('id', 'name', 'photo'))
-        return films
+        films = Film.objects.all().values_list('id', 'name', 'photo')
+        return HttpResponse(films)
+    return HttpResponse('Request method not allowed !')
+
+
+@csrf_exempt
+def add_comment(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            comment = Comment()
+            # choose film
+            film_name = request.POST.get('film')
+            film = Film.objects.get(name=film_name)
+            comment.film = film
+            # find commenter
+            comment.commenter = request.user
+            comment.date = request.POST.get('date')
+            comment.text = request.POST.get('text')
+            comment.save()
+            return HttpResponse('Your comment added successfully !')
+        return HttpResponse('You should login first !')
     return HttpResponse('Request method not allowed !')
