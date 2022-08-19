@@ -25,17 +25,17 @@ class Film(models.Model):
     score = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)])
     country = models.CharField(max_length=100)
     yearOfPublication = models.DateField()
-    photo = models.ImageField()
+    photo = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.name}'
 
 
 class Comment(models.Model):
-    commenter = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    commenter = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     film = models.ForeignKey(Film, on_delete=models.CASCADE, null=True)
     text = models.TextField()
-    date = models.DateField(default=datetime.date.today(), null=True)
+    date = models.DateField(default=datetime.date.today())
 
     def __str__(self):
         return f'{self.commenter} comments on {self.film}'

@@ -70,7 +70,7 @@ def upload_film(request):
 @csrf_exempt
 def show_all_film(request):
     if request.method == 'GET':
-        films = Film.objects.all().values_list('id', 'name', 'photo')
+        films = Film.objects.all().values_list('name', 'photo')
         return HttpResponse(films)
     return HttpResponse('Request method not allowed !')
 
@@ -86,9 +86,27 @@ def add_comment(request):
             comment.film = film
             # find commenter
             comment.commenter = request.user
-            comment.date = request.POST.get('date')
             comment.text = request.POST.get('text')
             comment.save()
             return HttpResponse('Your comment added successfully !')
         return HttpResponse('You should login first !')
     return HttpResponse('Request method not allowed !')
+
+
+@csrf_exempt
+def filter_films(request):
+    if request.path == '/category/horror/':
+        films = Film.objects.filter(genre='H').values_list('name', 'photo')
+        return HttpResponse(films)
+    elif request.path == '/category/action/':
+        films = Film.objects.filter(genre='A').values_list('name', 'photo')
+        return HttpResponse(films)
+    elif request.path == '/category/comedy/':
+        films = Film.objects.filter(genre='C').values_list('name', 'photo')
+        return HttpResponse(films)
+    elif request.path == '/category/fantasy/':
+        films = Film.objects.filter(genre='F').values_list('name', 'photo')
+        return HttpResponse(films)
+    elif request.path == '/category/drum/':
+        films = Film.objects.filter(genre='D').values_list('name', 'photo')
+        return HttpResponse(films)

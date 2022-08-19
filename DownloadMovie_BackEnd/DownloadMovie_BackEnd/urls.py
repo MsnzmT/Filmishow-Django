@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from backend.views import login, signup, logout, show_all_film, upload_film, add_comment
+from backend.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +25,9 @@ urlpatterns = [
     path('home/', show_all_film),
     path('upload-film/', upload_film),
     path('comment/', add_comment),
+    path('category/horror/', filter_films),
+    path('category/drum/', filter_films),
+    path('category/fantasy/', filter_films),
+    path('category/action/', filter_films),
+    path('category/comedy/', filter_films),
 ]
