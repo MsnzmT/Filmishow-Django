@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login as lgn, logout as lgout
 from .forms import SignUpForm
 from .models import Film, Comment
+from django.contrib.auth.decorators import permission_required
 
 
 @csrf_exempt
@@ -46,6 +47,7 @@ def logout(request):
     return HttpResponse('Request method not allowed !')
 
 
+@permission_required('backend.add_film', raise_exception=True)
 @csrf_exempt
 def upload_film(request):
     if request.method == 'POST':
