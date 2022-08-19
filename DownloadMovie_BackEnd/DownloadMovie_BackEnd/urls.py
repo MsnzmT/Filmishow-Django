@@ -30,4 +30,5 @@ urlpatterns = [
     path('category/fantasy/', filter_films),
     path('category/action/', filter_films),
     path('category/comedy/', filter_films),
+    path('search/', search_film),
 ]
