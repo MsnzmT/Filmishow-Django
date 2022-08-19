@@ -1,12 +1,14 @@
 from django.contrib import admin
-
-# Register your models here.
 from backend.models import Film, Comment, Profile
+
+
+class CommentInline(admin.StackedInline):
+    model = Comment
 
 
 @admin.register(Film)
 class FilmAdmin(admin.ModelAdmin):
-    pass
+    inlines = [CommentInline]
 
 
 @admin.register(Comment)
