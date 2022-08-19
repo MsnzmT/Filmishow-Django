@@ -8,6 +8,11 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=13)
 
 
+class Comment(models.Model):
+    text = models.TextField()
+    date = models.DateField()
+
+
 class Film(models.Model):
     GENRE_CHOICES = (('H', 'Horror'),
                      ('D', 'Drum'),
@@ -24,12 +29,7 @@ class Film(models.Model):
     country = models.CharField(max_length=100)
     yearOfPublication = models.DateField()
     photo = models.ImageField()
+    comments = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f'{self.name}'
-
-
-class Comment(models.Model):
-    commenter = models.OneToOneField(User, on_delete=models.CASCADE)
-    text = models.TextField()
-    date = models.DateField()

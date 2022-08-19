@@ -18,8 +18,8 @@ from django.urls import path
 from backend.views import login, signup, logout
 
 urlpatterns = [
-    path('admin', admin.site.urls),
-    path('signup', signup),
-    path('login', login),
-    path('logout', logout)
+    path('admin/', admin.site.urls),
+    path('signup/', signup),
+    path('login/', login),
+    path('logout/', logout)
 ]
