@@ -112,3 +112,15 @@ def filter_films(request):
     elif request.path == '/category/drum/':
         films = Film.objects.filter(genre='D').values_list('name', 'photo')
         return HttpResponse(films)
+
+
+@csrf_exempt
+def search_film(request):
+    if request.method == "GET":
+        film_name = request.GET.get('film_name')
+        try:
+            film = Film.objects.get(name=film_name)
+        except Film.DoesNotExist:
+            return HttpResponse('404 Not Found', status=404)
+        return HttpResponse(film)
+    return HttpResponse('Request method not allowed !')
