@@ -1,5 +1,5 @@
 from django import forms
-from .models import Film
+from .models import *
 
 
 class SignupForm(forms.Form):
@@ -22,3 +22,8 @@ class UploadFilmForm(forms.ModelForm):
     class Meta:
         model = Film
         fields = "__all__"
+
+
+class AddCommentForm(forms.Form):
+    film = forms.ModelChoiceField(queryset=Film.objects.all())
+    text = forms.CharField(widget=forms.Textarea)
