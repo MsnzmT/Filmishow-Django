@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login as lgn, logout as lgout
 from .models import *
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render
-from .forms import SignupForm
+from .forms import *
 
 
 @csrf_exempt
@@ -36,24 +36,29 @@ def signup(request):
 
 @csrf_exempt
 def login(request):
-    if request.method == 'POST':
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+    if request.method == 'GET':
+        form = LoginForm()
+        return render(request, 'login.html', {'form': form})
+    elif request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
 
-        user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=username, password=password)
 
-        if user:
-            lgn(request, user)
-            return HttpResponse('Login Successfully')
-        else:
-            return HttpResponse('Login Failed - Your password or username is wrong')
+            if user:
+                lgn(request, user)
+                return HttpResponse('Login Successfully')
+            else:
+                return HttpResponse('Login Failed - Your password or username is wrong')
     else:
         return HttpResponse('request method not allowed !')
 
 
 @csrf_exempt
 def logout(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
         if request.user.is_authenticated:
             lgout(request)
             return HttpResponse('You were loged out seccessfully !')

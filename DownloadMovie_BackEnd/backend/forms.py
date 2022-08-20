@@ -10,3 +10,8 @@ class SignupForm(forms.Form):
     username = forms.CharField()
     password1 = forms.CharField()
     password2 = forms.CharField()
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField()
