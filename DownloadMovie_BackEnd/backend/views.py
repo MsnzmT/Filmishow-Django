@@ -69,20 +69,16 @@ def logout(request):
 @permission_required('backend.add_film', raise_exception=True)
 @csrf_exempt
 def upload_film(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        form = UploadFilmForm()
+        return render(request, 'upload_film.html', {'form': form})
+    elif request.method == 'POST':
         if request.user.is_authenticated:
             if request.user.is_superuser:
-                film = Film()
-                film.name = request.POST.get('name')
-                film.summary = request.POST.get('summary')
-                film.genre = request.POST.get('genre')
-                film.director = request.POST.get('director')
-                film.actors = request.POST.get('actors')
-                film.country = request.POST.get('country')
-                film.yearOfPublication = request.POST.get('yearOfPublication')
-                film.photo = request.POST.get('photo')
-                film.save()
-                return HttpResponse('Film uploaded successfully !')
+                form = UploadFilmForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponse('Film uploaded successfully !')
             return HttpResponse('You should be admin !')
         return HttpResponse('You should login first !')
     return HttpResponse('Request method not allowed !')
