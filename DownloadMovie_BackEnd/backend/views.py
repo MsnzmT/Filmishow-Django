@@ -94,18 +94,22 @@ def show_all_film(request):
 
 @csrf_exempt
 def add_comment(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        form = AddCommentForm()
+        return render(request, 'add_comment.html', {'form': form})
+    elif request.method == 'POST':
         if request.user.is_authenticated:
-            comment = Comment()
-            # choose film
-            film_name = request.POST.get('film')
-            film = Film.objects.get(name=film_name)
-            comment.film = film
-            # find commenter
-            comment.commenter = request.user
-            comment.text = request.POST.get('text')
-            comment.save()
-            return HttpResponse('Your comment added successfully !')
+            form = AddCommentForm(request.POST)
+            if form.is_valid():
+                comment = Comment()
+                # choose film
+                film = form.cleaned_data['film']
+                comment.film = film
+                # find commenter
+                comment.commenter = request.user
+                comment.text = form.cleaned_data['text']
+                comment.save()
+                return HttpResponse('Your comment added successfully !')
         return HttpResponse('You should login first !')
     return HttpResponse('Request method not allowed !')
 
