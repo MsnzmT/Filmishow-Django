@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login as lgn, logout as lgout
 from .models import *
 from django.contrib.auth.decorators import permission_required
+from django.shortcuts import render
 
 
 @csrf_exempt
@@ -72,8 +73,8 @@ def upload_film(request):
 @csrf_exempt
 def show_all_film(request):
     if request.method == 'GET':
-        films = Film.objects.all().values_list('name', 'photo')
-        return HttpResponse(films)
+        films = Film.objects.all()
+        return render(request, 'film_detail.html', {'films': films})
     return HttpResponse('Request method not allowed !')
 
 
