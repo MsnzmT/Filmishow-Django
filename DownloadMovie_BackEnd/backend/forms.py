@@ -2,11 +2,11 @@ from django import forms
 
 
 class SignupForm(forms.Form):
-    first_name = forms.CharField(max_length=100)
-    last_name = forms.CharField(max_length=100)
+    first_name = forms.CharField()
+    last_name = forms.CharField()
     email = forms.EmailField()
-    country = forms.CharField(max_length=100)
-    phone_number = forms.CharField(max_length=20)
-    username = forms.CharField(max_length=100)
-    password1 = forms.CharField(max_length=100)
-    password2 = forms.CharField(max_length=100)
+    country = forms.CharField()
+    phone_number = forms.CharField()
+    username = forms.CharField()
+    password1 = forms.CharField()
+    password2 = forms.CharField()

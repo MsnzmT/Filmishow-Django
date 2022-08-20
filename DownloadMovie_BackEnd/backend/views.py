@@ -1,4 +1,4 @@
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login as lgn, logout as lgout
 from .models import *
@@ -13,14 +13,23 @@ def signup(request):
         form = SignupForm()
         return render(request, 'signup.html', {'form': form})
     elif request.method == 'POST':
-        username = request.POST.get('username')
-        pass1 = request.POST.get('password1')
-        pass2 = request.POST.get('password2')
-        email = request.POST.get('email')
-        if pass2 != pass1:
-            return HttpResponse('Entered passwords are not identical')
-        CustomUser.objects.create_user(username=username, password=pass1, email=email)
-        return HttpResponse('User created successfully!')
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            pass1 = form.cleaned_data['password1']
+            pass2 = form.cleaned_data['password2']
+            email = form.cleaned_data['email']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            country = form.cleaned_data['country']
+            phone_number = form.cleaned_data['phone_number']
+            if pass2 != pass1:
+                return HttpResponse('Entered passwords are not identical')
+            else:
+                CustomUser.objects.create_user(username=username, password=pass1, email=email,
+                                               first_name=first_name, last_name=last_name,
+                                               country=country, phone_number=phone_number)
+                return HttpResponse('User created successfully!')
     else:
         return HttpResponse('Only post method allowed!')
 
