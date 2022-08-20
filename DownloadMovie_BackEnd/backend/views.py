@@ -4,11 +4,15 @@ from django.contrib.auth import authenticate, login as lgn, logout as lgout
 from .models import *
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render
+from .forms import SignupForm
 
 
 @csrf_exempt
 def signup(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        form = SignupForm()
+        return render(request, 'signup.html', {'form': form})
+    elif request.method == 'POST':
         username = request.POST.get('username')
         pass1 = request.POST.get('password1')
         pass2 = request.POST.get('password2')
@@ -17,8 +21,8 @@ def signup(request):
             return HttpResponse('Entered passwords are not identical')
         CustomUser.objects.create_user(username=username, password=pass1, email=email)
         return HttpResponse('User created successfully!')
-
-    return HttpResponse('Only post method allowed!')
+    else:
+        return HttpResponse('Only post method allowed!')
 
 
 @csrf_exempt
