@@ -9,7 +9,6 @@ class CustomUser(AbstractUser):
     country = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     password = models.CharField(max_length=100)
-    password2 = models.CharField(max_length=100, null=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     username = models.CharField(max_length=100, unique=True)
