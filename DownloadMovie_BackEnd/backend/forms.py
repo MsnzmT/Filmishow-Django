@@ -1,4 +1,5 @@
 from django import forms
+from .models import Film
 
 
 class SignupForm(forms.Form):
@@ -15,3 +16,9 @@ class SignupForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField()
+
+
+class UploadFilmForm(forms.ModelForm):
+    class Meta:
+        model = Film
+        fields = "__all__"
