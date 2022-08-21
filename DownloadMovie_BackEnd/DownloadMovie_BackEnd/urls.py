@@ -20,7 +20,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('signup/', signup),
+    # path('signup/', signup),
     path('login/', obtain_auth_token),
     path('logout/', LogOut.as_view()),
     path('home/', show_all_film),
