@@ -16,12 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from backend.views import *
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('signup/', signup),
-    path('login/', login),
-    path('logout/', logout),
+    path('login/', obtain_auth_token),
+    path('logout/', LogOut.as_view()),
     path('home/', show_all_film),
     path('upload-film/', upload_film),
     path('comment/', add_comment),
