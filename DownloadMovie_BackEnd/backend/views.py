@@ -6,65 +6,75 @@ from django.shortcuts import render
 from .forms import *
 from rest_framework .decorators import api_view
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.generics import get_object_or_404, GenericAPIView
+from rest_framework.permissions import IsAuthenticated
 
 
-@csrf_exempt
-def signup(request):
-    if request.method == 'GET':
-        form = SignupForm()
-        return render(request, 'signup.html', {'form': form})
-    elif request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            pass1 = form.cleaned_data['password1']
-            pass2 = form.cleaned_data['password2']
-            email = form.cleaned_data['email']
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            country = form.cleaned_data['country']
-            phone_number = form.cleaned_data['phone_number']
-            if pass2 != pass1:
-                return HttpResponse('Entered passwords are not identical')
-            else:
-                CustomUser.objects.create_user(username=username, password=pass1, email=email,
-                                               first_name=first_name, last_name=last_name,
-                                               country=country, phone_number=phone_number)
-                return HttpResponse('User created successfully!')
-    else:
-        return HttpResponse('Only post method allowed!')
+# @csrf_exempt
+# def signup(request):
+#     if request.method == 'GET':
+#         form = SignupForm()
+#         return render(request, 'signup.html', {'form': form})
+#     elif request.method == 'POST':
+#         form = SignupForm(request.POST)
+#         if form.is_valid():
+#             username = form.cleaned_data['username']
+#             pass1 = form.cleaned_data['password1']
+#             pass2 = form.cleaned_data['password2']
+#             email = form.cleaned_data['email']
+#             first_name = form.cleaned_data['first_name']
+#             last_name = form.cleaned_data['last_name']
+#             country = form.cleaned_data['country']
+#             phone_number = form.cleaned_data['phone_number']
+#             if pass2 != pass1:
+#                 return HttpResponse('Entered passwords are not identical')
+#             else:
+#                 CustomUser.objects.create_user(username=username, password=pass1, email=email,
+#                                                first_name=first_name, last_name=last_name,
+#                                                country=country, phone_number=phone_number)
+#                 return HttpResponse('User created successfully!')
+#     else:
+#         return HttpResponse('Only post method allowed!')
 
 
-@csrf_exempt
-def login(request):
-    if request.method == 'GET':
-        form = LoginForm()
-        return render(request, 'login.html', {'form': form})
-    elif request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
 
-            user = authenticate(request, username=username, password=password)
+# @csrf_exempt
+# def login(request):
+#     if request.method == 'GET':
+#         form = LoginForm()
+#         return render(request, 'login.html', {'form': form})
+#     elif request.method == 'POST':
+#         form = LoginForm(request.POST)
+#         if form.is_valid():
+#             username = form.cleaned_data["username"]
+#             password = form.cleaned_data["password"]
+#
+#             user = authenticate(request, username=username, password=password)
+#
+#             if user:
+#                 lgn(request, user)
+#                 return HttpResponse('Login Successfully')
+#             else:
+#                 return HttpResponse('Login Failed - Your password or username is wrong')
+#     else:
+#         return HttpResponse('request method not allowed !')
 
-            if user:
-                lgn(request, user)
-                return HttpResponse('Login Successfully')
-            else:
-                return HttpResponse('Login Failed - Your password or username is wrong')
-    else:
-        return HttpResponse('request method not allowed !')
 
+# @csrf_exempt
+# def logout(request):
+#     if request.method == 'GET':
+#         if request.user.is_authenticated:
+#             lgout(request)
+#             return HttpResponse('You were logged out seccessfully !')
+#         return HttpResponse('You should login first !')
+#     return HttpResponse('Request method not allowed !')
+class LogOut(APIView):
+    permission_classes = (IsAuthenticated, )
 
-@csrf_exempt
-def logout(request):
-    if request.method == 'GET':
-        if request.user.is_authenticated:
-            lgout(request)
-            return HttpResponse('You were loged out seccessfully !')
-        return HttpResponse('You should login first !')
-    return HttpResponse('Request method not allowed !')
+    def post(self, requset):
+        requset.user.auth_token.delete()
+        return Response({'message': 'Logged out successfully!'})
 
 
 @permission_required('backend.add_film', raise_exception=True)
