@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from .models import *
 
 
 class SignUpSerializer(serializers.Serializer):
@@ -16,3 +17,15 @@ class SignUpSerializer(serializers.Serializer):
     username = serializers.CharField()
     password1 = serializers.CharField()
     password2 = serializers.CharField()
+
+
+class FilmSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Film
+        fields = '__all__'
+
+
+class AllFilmsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Film
+        fields = ('name', 'photo')

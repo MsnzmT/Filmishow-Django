@@ -1,157 +1,127 @@
-from django.http.response import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login as lgn, logout as lgout
-from django.contrib.auth.decorators import permission_required
-from django.shortcuts import render
-from .forms import *
-from rest_framework .decorators import api_view
+from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import get_object_or_404, GenericAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from .serializers import *
+from .models import *
+from rest_framework import status
 
 
-# @csrf_exempt
-# def signup(request):
-#     if request.method == 'GET':
-#         form = SignupForm()
-#         return render(request, 'signup.html', {'form': form})
-#     elif request.method == 'POST':
-#         form = SignupForm(request.POST)
-#         if form.is_valid():
-#             username = form.cleaned_data['username']
-#             pass1 = form.cleaned_data['password1']
-#             pass2 = form.cleaned_data['password2']
-#             email = form.cleaned_data['email']
-#             first_name = form.cleaned_data['first_name']
-#             last_name = form.cleaned_data['last_name']
-#             country = form.cleaned_data['country']
-#             phone_number = form.cleaned_data['phone_number']
-#             if pass2 != pass1:
-#                 return HttpResponse('Entered passwords are not identical')
-#             else:
-#                 CustomUser.objects.create_user(username=username, password=pass1, email=email,
-#                                                first_name=first_name, last_name=last_name,
-#                                                country=country, phone_number=phone_number)
-#                 return HttpResponse('User created successfully!')
-#     else:
-#         return HttpResponse('Only post method allowed!')
+class SignUp(APIView):
+    def post(self, request):
+        username = request.data['username']
+        pass1 = request.data['password1']
+        pass2 = request.data['password2']
+        email = request.data['email']
+        first_name = request.data['first_name']
+        last_name = request.data['last_name']
+        country = request.data['country']
+        phone_number = request.data['phone_number']
+        if pass2 != pass1:
+            return Response({'message': 'Entered passwords are not identical'})
+        else:
+            CustomUser.objects.create_user(username=username, password=pass1, email=email,
+                                           first_name=first_name, last_name=last_name,
+                                           country=country, phone_number=phone_number)
+            return Response({'message': 'User created successfully!'}, status=status.HTTP_201_CREATED)
 
 
-
-# @csrf_exempt
-# def login(request):
-#     if request.method == 'GET':
-#         form = LoginForm()
-#         return render(request, 'login.html', {'form': form})
-#     elif request.method == 'POST':
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             username = form.cleaned_data["username"]
-#             password = form.cleaned_data["password"]
-#
-#             user = authenticate(request, username=username, password=password)
-#
-#             if user:
-#                 lgn(request, user)
-#                 return HttpResponse('Login Successfully')
-#             else:
-#                 return HttpResponse('Login Failed - Your password or username is wrong')
-#     else:
-#         return HttpResponse('request method not allowed !')
-
-
-# @csrf_exempt
-# def logout(request):
-#     if request.method == 'GET':
-#         if request.user.is_authenticated:
-#             lgout(request)
-#             return HttpResponse('You were logged out seccessfully !')
-#         return HttpResponse('You should login first !')
-#     return HttpResponse('Request method not allowed !')
 class LogOut(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
 
     def post(self, requset):
         requset.user.auth_token.delete()
-        return Response({'message': 'Logged out successfully!'})
+        return Response({'message': 'Logged out successfully!'}, status=status.HTTP_200_OK)
 
 
-@permission_required('backend.add_film', raise_exception=True)
-@csrf_exempt
-def upload_film(request):
-    if request.method == 'GET':
-        form = UploadFilmForm()
-        return render(request, 'upload_film.html', {'form': form})
-    elif request.method == 'POST':
-        if request.user.is_authenticated:
-            if request.user.is_superuser:
-                form = UploadFilmForm(request.POST)
-                if form.is_valid():
-                    form.save()
-                    return HttpResponse('Film uploaded successfully !')
-            return HttpResponse('You should be admin !')
-        return HttpResponse('You should login first !')
-    return HttpResponse('Request method not allowed !')
+class AllFilms(APIView):
+    def get(self, request):
+        films = Film.objects.all()
+        serializer = AllFilmsSerializer(films, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@csrf_exempt
-def show_all_film(request):
-    if request.method == 'GET':
-        films = list(Film.objects.values())
-        # return render(request, 'film_detail.html', {'films': films})
-        return JsonResponse(films, safe=False)
-    return HttpResponse('Request method not allowed !')
+class UploadFilm(APIView):
+    permission_classes = (IsAuthenticated, IsAdminUser)
+
+    def post(self, request):
+        serializer = FilmSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Film uploaded successfully !'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors)
+#
+#
+# @csrf_exempt
+# def add_comment(request):
+#     if request.method == 'POST':
+#         if request.user.is_authenticated:
+#             form = AddCommentForm(request.POST)
+#             if form.is_valid():
+#                 comment = Comment()
+#                 # choose film
+#                 film = form.cleaned_data['film']
+#                 comment.film = film
+#                 # find commenter
+#                 comment.commenter = request.user
+#                 comment.text = form.cleaned_data['text']
+#                 comment.save()
+#                 return HttpResponse('Your comment added successfully !')
+#         return HttpResponse('You should login first !')
+#     return HttpResponse('Request method not allowed !')
 
 
-@csrf_exempt
-def add_comment(request):
-    if request.method == 'GET':
-        form = AddCommentForm()
-        return render(request, 'add_comment.html', {'form': form})
-    elif request.method == 'POST':
-        if request.user.is_authenticated:
-            form = AddCommentForm(request.POST)
-            if form.is_valid():
-                comment = Comment()
-                # choose film
-                film = form.cleaned_data['film']
-                comment.film = film
-                # find commenter
-                comment.commenter = request.user
-                comment.text = form.cleaned_data['text']
-                comment.save()
-                return HttpResponse('Your comment added successfully !')
-        return HttpResponse('You should login first !')
-    return HttpResponse('Request method not allowed !')
+class AddComment(APIView):
+    def post(self, request):
+        comment = Comment()
+
+#
+#
+# @csrf_exempt
+# def filter_films(request):
+#     if request.path == '/category/horror/':
+#         films = Film.objects.filter(genre='H').values_list('name', 'photo')
+#         return HttpResponse(films)
+#     elif request.path == '/category/action/':
+#         films = Film.objects.filter(genre='A').values_list('name', 'photo')
+#         return HttpResponse(films)
+#     elif request.path == '/category/comedy/':
+#         films = Film.objects.filter(genre='C').values_list('name', 'photo')
+#         return HttpResponse(films)
+#     elif request.path == '/category/fantasy/':
+#         films = Film.objects.filter(genre='F').values_list('name', 'photo')
+#         return HttpResponse(films)
+#     elif request.path == '/category/drum/':
+#         films = Film.objects.filter(genre='D').values_list('name', 'photo')
+#         return HttpResponse(films)
 
 
-@csrf_exempt
-def filter_films(request):
-    if request.path == '/category/horror/':
-        films = Film.objects.filter(genre='H').values_list('name', 'photo')
-        return HttpResponse(films)
-    elif request.path == '/category/action/':
-        films = Film.objects.filter(genre='A').values_list('name', 'photo')
-        return HttpResponse(films)
-    elif request.path == '/category/comedy/':
-        films = Film.objects.filter(genre='C').values_list('name', 'photo')
-        return HttpResponse(films)
-    elif request.path == '/category/fantasy/':
-        films = Film.objects.filter(genre='F').values_list('name', 'photo')
-        return HttpResponse(films)
-    elif request.path == '/category/drum/':
-        films = Film.objects.filter(genre='D').values_list('name', 'photo')
-        return HttpResponse(films)
+class FilterFilms(APIView):
+    def get(self, request):
+        try:
+            if request.path == '/category/horror/':
+                films = Film.objects.filter(genre='H')
+            elif request.path == '/category/action/':
+                films = Film.objects.filter(genre='A').values_list('name', 'photo')
+            elif request.path == '/category/comedy/':
+                films = Film.objects.filter(genre='C').values_list('name', 'photo')
+            elif request.path == '/category/fantasy/':
+                films = Film.objects.filter(genre='F').values_list('name', 'photo')
+            elif request.path == '/category/drum/':
+                films = Film.objects.filter(genre='D').values_list('name', 'photo')
+        except Film.DoesNotExist:
+            return Response({'message': '404 not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = AllFilmsSerializer(films, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@csrf_exempt
-def search_film(request):
-    if request.method == "GET":
-        film_name = request.GET.get('film_name')
+class SearchFilm(APIView):
+    def get(self, request):
+        film_name = request.query_params.get('name')
         try:
             film = Film.objects.get(name=film_name)
         except Film.DoesNotExist:
-            return HttpResponse('404 Not Found', status=404)
-        return HttpResponse(film)
-    return HttpResponse('Request method not allowed !')
+            return Response({'message': '404 Not Found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = FilmSerializer(film)
+        return Response(serializer.data, status=status.HTTP_200_OK)
