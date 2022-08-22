@@ -1,7 +1,7 @@
-import datetime
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 
 class CustomUser(AbstractUser):
@@ -39,7 +39,7 @@ class Comment(models.Model):
     commenter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     film = models.ForeignKey(Film, on_delete=models.CASCADE, null=True)
     text = models.TextField()
-    date = models.DateField(default=datetime.date.today())
+    date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f'{self.commenter} comments on {self.film}'
