@@ -22,10 +22,9 @@ class SignUpSerializer(serializers.Serializer):
 class FilmSerializer(serializers.ModelSerializer):
     class Meta:
         model = Film
-        fields = '__all__'
+        fields = ('id', 'name', 'summary', 'genre', 'director', 'actors', 'score', 'country',
+                  'yearOfPublication', 'photo')
 
 
-class AllFilmsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Film
-        fields = ('name', 'photo')
+class IdSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
