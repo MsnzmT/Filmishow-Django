@@ -31,5 +31,6 @@ urlpatterns = [
     path('category/fantasy/', FilterFilms.as_view()),
     path('category/action/', FilterFilms.as_view()),
     path('category/comedy/', FilterFilms.as_view()),
-    path('search/', SearchFilm.as_view()),
+    path('search/', SearchFilmName.as_view()),
+    path('film/<int:film_id>/', SearchFilmId.as_view())
 ]

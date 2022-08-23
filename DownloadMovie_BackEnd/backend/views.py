@@ -1,7 +1,6 @@
-from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import get_object_or_404, GenericAPIView
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .serializers import *
 from .models import *
@@ -38,7 +37,7 @@ class LogOut(APIView):
 class AllFilms(APIView):
     def get(self, request):
         films = Film.objects.all()
-        serializer = AllFilmsSerializer(films, many=True)
+        serializer = FilmSerializer(films, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -74,27 +73,7 @@ class UploadFilm(APIView):
 
 class AddComment(APIView):
     def post(self, request):
-        comment = Comment()
-
-#
-#
-# @csrf_exempt
-# def filter_films(request):
-#     if request.path == '/category/horror/':
-#         films = Film.objects.filter(genre='H').values_list('name', 'photo')
-#         return HttpResponse(films)
-#     elif request.path == '/category/action/':
-#         films = Film.objects.filter(genre='A').values_list('name', 'photo')
-#         return HttpResponse(films)
-#     elif request.path == '/category/comedy/':
-#         films = Film.objects.filter(genre='C').values_list('name', 'photo')
-#         return HttpResponse(films)
-#     elif request.path == '/category/fantasy/':
-#         films = Film.objects.filter(genre='F').values_list('name', 'photo')
-#         return HttpResponse(films)
-#     elif request.path == '/category/drum/':
-#         films = Film.objects.filter(genre='D').values_list('name', 'photo')
-#         return HttpResponse(films)
+        pass
 
 
 class FilterFilms(APIView):
@@ -112,16 +91,20 @@ class FilterFilms(APIView):
                 films = Film.objects.filter(genre='D').values_list('name', 'photo')
         except Film.DoesNotExist:
             return Response({'message': '404 not found'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = AllFilmsSerializer(films, many=True)
+        serializer = FilmSerializer(films, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class SearchFilm(APIView):
+class SearchFilmName(APIView):
     def get(self, request):
         film_name = request.query_params.get('name')
-        try:
-            film = Film.objects.get(name=film_name)
-        except Film.DoesNotExist:
-            return Response({'message': '404 Not Found'}, status=status.HTTP_404_NOT_FOUND)
+        film = get_object_or_404(Film, name=film_name)
+        serializer = IdSerializer(film)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class SearchFilmId(APIView):
+    def get(self, request, film_id):
+        film = get_object_or_404(Film, id=film_id)
         serializer = FilmSerializer(film)
         return Response(serializer.data, status=status.HTTP_200_OK)
