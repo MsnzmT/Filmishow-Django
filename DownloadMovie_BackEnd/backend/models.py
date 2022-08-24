@@ -15,15 +15,15 @@ class CustomUser(AbstractUser):
 
 
 class Film(models.Model):
-    GENRE_CHOICES = (('H', 'Horror'),
-                     ('D', 'Drum'),
-                     ('A', 'Action'),
-                     ('C', 'Comedy'),
-                     ('F', 'Fantasy'))
+    GENRE_CHOICES = (('Horror', 'Horror'),
+                     ('Drum', 'Drum'),
+                     ('Action', 'Action'),
+                     ('Comedy', 'Comedy'),
+                     ('Fantasy', 'Fantasy'))
     # - - - - - Attributes - - - - -
     name = models.CharField(max_length=30)
     summary = models.TextField(max_length=200)
-    genre = models.CharField(max_length=1, choices=GENRE_CHOICES)
+    genre = models.CharField(max_length=100, choices=GENRE_CHOICES)
     director = models.CharField(max_length=20)
     actors = models.CharField(max_length=500)
     score = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)])
