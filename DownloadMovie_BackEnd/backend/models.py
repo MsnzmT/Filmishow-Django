@@ -29,7 +29,8 @@ class Film(models.Model):
     score = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)])
     country = models.CharField(max_length=100)
     yearOfPublication = models.DateField()
-    photo = models.ImageField(null=True, blank=True, upload_to="MoviesPictures/")
+    # photo = models.ImageField(null=True, blank=True, upload_to="MoviesPictures/")
+    photo = models.CharField(max_length=800, null=True, blank=True)
 
     def __str__(self):
         return f'{self.name}'
