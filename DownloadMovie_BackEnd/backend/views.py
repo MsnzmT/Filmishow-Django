@@ -50,30 +50,21 @@ class UploadFilm(APIView):
             serializer.save()
             return Response({'message': 'Film uploaded successfully !'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors)
-#
-#
-# @csrf_exempt
-# def add_comment(request):
-#     if request.method == 'POST':
-#         if request.user.is_authenticated:
-#             form = AddCommentForm(request.POST)
-#             if form.is_valid():
-#                 comment = Comment()
-#                 # choose film
-#                 film = form.cleaned_data['film']
-#                 comment.film = film
-#                 # find commenter
-#                 comment.commenter = request.user
-#                 comment.text = form.cleaned_data['text']
-#                 comment.save()
-#                 return HttpResponse('Your comment added successfully !')
-#         return HttpResponse('You should login first !')
-#     return HttpResponse('Request method not allowed !')
 
 
 class AddComment(APIView):
-    def post(self, request):
-        pass
+    permission_classes = [IsAuthenticated,]
+
+    def get(self, request, film_id):
+        text = request.query_params.get('text')
+        film = get_object_or_404(Film, id=film_id)
+        comment = Comment()
+        comment.film = film
+        comment.text = text
+        comment.commenter = request.user
+        comment.save()
+        serializer = FilmSerializer(film)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class FilterFilms(APIView):
