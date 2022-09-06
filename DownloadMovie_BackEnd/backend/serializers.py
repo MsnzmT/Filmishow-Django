@@ -19,11 +19,19 @@ class SignUpSerializer(serializers.Serializer):
     password2 = serializers.CharField()
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('text',)
+
+
 class FilmSerializer(serializers.ModelSerializer):
+    comments = CommentSerializer(read_only=True, many=True)
+
     class Meta:
         model = Film
         fields = ('id', 'name', 'summary', 'genre', 'director', 'actors', 'score', 'country',
-                  'yearOfPublication', 'photo')
+                  'yearOfPublication', 'photo', 'comments')
 
 
 class IdSerializer(serializers.Serializer):

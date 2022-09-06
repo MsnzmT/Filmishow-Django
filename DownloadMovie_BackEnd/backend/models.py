@@ -38,7 +38,7 @@ class Film(models.Model):
 
 class Comment(models.Model):
     commenter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
-    film = models.ForeignKey(Film, on_delete=models.CASCADE, null=True)
+    film = models.ForeignKey(Film, on_delete=models.CASCADE, null=True, related_name='comments')
     text = models.TextField()
     date = models.DateTimeField(default=timezone.now)
 

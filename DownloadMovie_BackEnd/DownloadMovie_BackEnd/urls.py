@@ -25,7 +25,7 @@ urlpatterns = [
     path('logout/', LogOut.as_view()),
     path('home/', AllFilms.as_view()),
     path('upload-film/', UploadFilm.as_view()),
-    # path('comment/', add_comment),
+    path('film/<int:film_id>/', AddComment.as_view()),
     path('category/horror/', FilterFilms.as_view()),
     path('category/drum/', FilterFilms.as_view()),
     path('category/fantasy/', FilterFilms.as_view()),
