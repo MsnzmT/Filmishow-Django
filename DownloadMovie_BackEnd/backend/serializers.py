@@ -19,10 +19,18 @@ class SignUpSerializer(serializers.Serializer):
     password2 = serializers.CharField()
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('first_name', 'last_name', 'username')
+
+
 class CommentSerializer(serializers.ModelSerializer):
+    commenter = UserSerializer(read_only=True)
+
     class Meta:
         model = Comment
-        fields = ('text',)
+        fields = ('id', 'text', 'date', 'commenter')
 
 
 class FilmSerializer(serializers.ModelSerializer):

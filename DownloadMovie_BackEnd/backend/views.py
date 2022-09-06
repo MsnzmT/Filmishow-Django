@@ -53,7 +53,7 @@ class UploadFilm(APIView):
 
 
 class AddComment(APIView):
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request, film_id):
         text = request.query_params.get('text')
@@ -61,7 +61,9 @@ class AddComment(APIView):
         comment = Comment()
         comment.film = film
         comment.text = text
-        comment.commenter = request.user
+        user_name = request.user
+        user = get_object_or_404(CustomUser, username=user_name)
+        comment.commenter = user
         comment.save()
         serializer = FilmSerializer(film)
         return Response(serializer.data, status=status.HTTP_200_OK)
