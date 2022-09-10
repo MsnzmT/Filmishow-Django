@@ -101,3 +101,5 @@ class SearchFilmId(APIView):
         film = get_object_or_404(Film, id=film_id)
         serializer = FilmSerializer(film)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
