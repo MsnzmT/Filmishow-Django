@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .serializers import *
 from .models import *
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from django.http.response import HttpResponse
 
 
 class SignUp(APIView):
@@ -101,3 +103,14 @@ class SearchFilmId(APIView):
         film = get_object_or_404(Film, id=film_id)
         serializer = FilmSerializer(film)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class LogoutJWT(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request):
+        refresh_token = request.data.get('refresh_token')
+        token1 = RefreshToken(refresh_token)
+        token1.blacklist()
+
+        return Response(status=status.HTTP_205_RESET_CONTENT)
