@@ -30,7 +30,7 @@ class Film(models.Model):
     actors = models.CharField(max_length=500)
     score = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)])
     country = models.CharField(max_length=100)
-    yearOfPublication = models.DateField()
+    yearOfPublication = models.IntegerField(max_length=4)
     # photo = models.ImageField(null=True, blank=True, upload_to="MoviesPictures/")
     photo = models.CharField(max_length=800, null=True, blank=True)
 
