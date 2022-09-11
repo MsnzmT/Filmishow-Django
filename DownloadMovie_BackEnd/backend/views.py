@@ -17,14 +17,13 @@ class SignUp(APIView):
         email = request.data['email']
         first_name = request.data['first_name']
         last_name = request.data['last_name']
-        country = request.data['country']
-        phone_number = request.data['phone_number']
+        # country = request.data['country']
+        # phone_number = request.data['phone_number']
         if pass2 != pass1:
-            return Response({'message': 'Entered passwords are not identical'})
+            return Response({'message': 'Entered passwords are not identical'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             CustomUser.objects.create_user(username=username, password=pass1, email=email,
-                                           first_name=first_name, last_name=last_name,
-                                           country=country, phone_number=phone_number)
+                                           first_name=first_name, last_name=last_name)
             return Response({'message': 'User created successfully!'}, status=status.HTTP_201_CREATED)
 
 
