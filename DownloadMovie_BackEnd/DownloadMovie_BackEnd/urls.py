@@ -24,12 +24,12 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('signup/', SignUp.as_view()),
-    path('login/', obtain_auth_token),
-    path('logout/', LogOut.as_view()),
+    # path('signup/', SignUp.as_view()),
+    # path('login/', obtain_auth_token),
+    # path('logout/', LogOut.as_view()),
     path('home/', AllFilms.as_view()),
     path('upload-film/', UploadFilm.as_view()),
-    path('film/<int:film_id>/', AddComment.as_view()),
+    path('comment/<int:film_id>/', AddComment.as_view()),
     path('category/horror/', FilterFilms.as_view()),
     path('category/drum/', FilterFilms.as_view()),
     path('category/fantasy/', FilterFilms.as_view()),

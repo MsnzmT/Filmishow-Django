@@ -12,6 +12,11 @@ class FilmAdmin(admin.ModelAdmin):
     inlines = [CommentInline]
 
 
+@admin.register(Genre)
+class GenreAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     pass
@@ -23,12 +28,8 @@ class UserAdmin(DefaultUserAdmin):
         (None, {'fields': ('username', 'password')}),
         ('Personal info', {
             'fields': (
-                'first_name',
-                'last_name',
                 'full_name',
                 'email',
-                'phone_number',
-                'country'
             )
         }),
         ('Permissions', {
@@ -46,16 +47,18 @@ class UserAdmin(DefaultUserAdmin):
     list_display = (
         'username',
         'email',
-        'first_name',
-        'last_name',
-        'phone_number',
+        'full_name',
         'is_staff',
     )
 
     search_fields = (
         'username',
-        'first_name',
-        'last_name',
+        'full_name',
         'phone_number',
         'email',
     )
+
+
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
+    pass

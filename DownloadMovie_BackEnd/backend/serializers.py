@@ -2,6 +2,18 @@ from rest_framework import serializers
 from .models import *
 
 
+class GenreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Genre
+        fields = ('name',)
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ('name',)
+
+
 class SignUpSerializer(serializers.Serializer):
     # def create(self, validated_data):
     #     pass
@@ -13,8 +25,8 @@ class SignUpSerializer(serializers.Serializer):
     # last_name = serializers.CharField()
     full_name = serializers.CharField()
     email = serializers.EmailField()
-    country = serializers.CharField()
-    phone_number = serializers.CharField()
+    # country = serializers.CharField()
+    # phone_number = serializers.CharField()
     username = serializers.CharField()
     password1 = serializers.CharField()
     password2 = serializers.CharField()
@@ -36,12 +48,16 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class FilmSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(read_only=True, many=True)
+    genres = GenreSerializer(many=True, read_only=True)
+    countries = CountrySerializer(many=True, read_only=True)
 
     class Meta:
         model = Film
-        fields = ('id', 'name', 'summary', 'genre', 'director', 'actors', 'score', 'country',
-                  'yearOfPublication', 'photo', 'comments')
+        fields = ('id', 'pName','eName', 'summary', 'genres', 'directors', 'actors', 'score', 'average_people', 'time',
+                  'countries',
+                  'yearOfPublication', 'photo', 'comments', 'group')
 
 
 class IdSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+

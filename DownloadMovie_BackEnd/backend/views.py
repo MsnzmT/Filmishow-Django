@@ -5,8 +5,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .serializers import *
 from .models import *
 from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
-from django.http.response import HttpResponse
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class SignUp(APIView):
@@ -75,15 +74,15 @@ class FilterFilms(APIView):
     def get(self, request):
         try:
             if request.path == '/category/horror/':
-                films = Film.objects.filter(genre='Horror')
+                films = Film.objects.filter(genres__name='ترسناک')
             elif request.path == '/category/action/':
-                films = Film.objects.filter(genre='Action')
+                films = Film.objects.filter(genres__name='اکشن')
             elif request.path == '/category/comedy/':
-                films = Film.objects.filter(genre='Comedy')
+                films = Film.objects.filter(genres__name='کمدی')
             elif request.path == '/category/fantasy/':
-                films = Film.objects.filter(genre='Fantasy')
+                films = Film.objects.filter(genres__name='فانتزی')
             elif request.path == '/category/drum/':
-                films = Film.objects.filter(genre='Drum')
+                films = Film.objects.filter(genres__name='درام')
         except Film.DoesNotExist:
             return Response({'message': '404 not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = FilmSerializer(films, many=True)
