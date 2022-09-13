@@ -9,8 +9,9 @@ class SignUpSerializer(serializers.Serializer):
     # def update(self, instance, validated_data):
     #     pass
 
-    first_name = serializers.CharField()
-    last_name = serializers.CharField()
+    # first_name = serializers.CharField()
+    # last_name = serializers.CharField()
+    full_name = serializers.CharField()
     email = serializers.EmailField()
     country = serializers.CharField()
     phone_number = serializers.CharField()
@@ -22,7 +23,7 @@ class SignUpSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('first_name', 'last_name', 'username')
+        fields = ('full_name', 'username')
 
 
 class CommentSerializer(serializers.ModelSerializer):
