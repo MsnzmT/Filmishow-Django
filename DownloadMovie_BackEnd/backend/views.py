@@ -15,15 +15,16 @@ class SignUp(APIView):
         pass1 = request.data['password1']
         pass2 = request.data['password2']
         email = request.data['email']
-        first_name = request.data['first_name']
-        last_name = request.data['last_name']
+        # first_name = request.data['first_name']
+        # last_name = request.data['last_name']
+        full_name = request.data['full_name']
         # country = request.data['country']
         # phone_number = request.data['phone_number']
         if pass2 != pass1:
             return Response({'message': 'Entered passwords are not identical'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             CustomUser.objects.create_user(username=username, password=pass1, email=email,
-                                           first_name=first_name, last_name=last_name)
+                                           full_name=full_name)
             return Response({'message': 'User created successfully!'}, status=status.HTTP_201_CREATED)
 
 
@@ -108,8 +109,11 @@ class LogoutJWT(APIView):
     permission_classes = (IsAuthenticated, )
 
     def post(self, request):
-        refresh_token = request.data.get('refresh_token')
-        token1 = RefreshToken(refresh_token)
-        token1.blacklist()
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
 
-        return Response(status=status.HTTP_205_RESET_CONTENT)
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
