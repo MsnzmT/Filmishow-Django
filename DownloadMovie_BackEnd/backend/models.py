@@ -17,19 +17,29 @@ class CustomUser(AbstractUser):
 
 class Country(models.Model):
     name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, null=True)
+
+    def __str__(self):
+        return f'{self.name}'
+
+
+class Language(models.Model):
+    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
 
     def __str__(self):
         return f'{self.name}'
 
 
 class Genre(models.Model):
-    GENRE_CHOICES = (('ترسناک', 'ترسناک'),
-                     ('درام', 'درام'),
-                     ('اکشن', 'اکشن'),
-                     ('کمدی', 'کمدی'),
-                     ('فانتزی', 'فانتزی'))
+    GENRE_CHOICES = (('horror', 'horror'),
+                     ('drum', 'drum'),
+                     ('action', 'action'),
+                     ('comedy', 'comedy'),
+                     ('fantasy', 'fantasy'))
 
     name = models.CharField(choices=GENRE_CHOICES, max_length=20)
+    title = models.CharField(max_length=20, null=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -52,6 +62,7 @@ class Film(models.Model):
     score = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)])
     average_people = models.IntegerField(null=True)
     time = models.IntegerField(null=True)
+    language = models.ManyToManyField(Language, related_name='language')
     countries = models.ManyToManyField(Country, related_name='countries')
     yearOfPublication = models.IntegerField(validators=[MinValueValidator(1000), MaxValueValidator(2022)])
     # photo = models.ImageField(null=True, blank=True, upload_to="MoviesPictures/")

@@ -24,7 +24,7 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('signup/', SignUp.as_view()),
+    path('signup/', SignUp.as_view()),
     # path('login/', obtain_auth_token),
     # path('logout/', LogOut.as_view()),
     path('home/', AllFilms.as_view()),
