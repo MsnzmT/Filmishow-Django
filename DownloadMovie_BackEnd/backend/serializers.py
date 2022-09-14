@@ -69,3 +69,8 @@ class FilmSerializer(serializers.ModelSerializer):
 class IdSerializer(serializers.Serializer):
     id = serializers.IntegerField()
 
+
+class ArrivalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Film
+        fields = ('id', 'eName', 'photo', 'score', 'group')
