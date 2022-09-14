@@ -5,13 +5,20 @@ from .models import *
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
-        fields = ('name',)
+        fields = ('name', 'title')
 
 
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
-        fields = ('name',)
+        fields = ('name', 'title')
+
+
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
+        fields = ('name', 'title')
+
 
 
 class SignUpSerializer(serializers.Serializer):
@@ -50,11 +57,12 @@ class FilmSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(read_only=True, many=True)
     genres = GenreSerializer(many=True, read_only=True)
     countries = CountrySerializer(many=True, read_only=True)
+    language = LanguageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Film
-        fields = ('id', 'pName','eName', 'summary', 'genres', 'directors', 'actors', 'score', 'average_people', 'time',
-                  'countries',
+        fields = ('id', 'pName', 'eName', 'summary', 'genres', 'directors', 'actors', 'score', 'average_people', 'time',
+                  'language', 'countries',
                   'yearOfPublication', 'photo', 'comments', 'group')
 
 

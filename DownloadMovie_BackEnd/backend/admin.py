@@ -14,7 +14,12 @@ class FilmAdmin(admin.ModelAdmin):
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'title')
+
+
+@admin.register(Language)
+class LanguageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'title')
 
 
 @admin.register(Comment)
@@ -61,4 +66,4 @@ class UserAdmin(DefaultUserAdmin):
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'title')

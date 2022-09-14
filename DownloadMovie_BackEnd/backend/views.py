@@ -92,7 +92,7 @@ class FilterFilms(APIView):
 class SearchFilmName(APIView):
     def get(self, request):
         film_name = request.query_params.get('name')
-        film = get_object_or_404(Film, name=film_name)
+        film = get_object_or_404(Film, eName=film_name)
         serializer = IdSerializer(film)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
