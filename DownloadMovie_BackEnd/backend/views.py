@@ -74,15 +74,15 @@ class FilterFilms(APIView):
     def get(self, request):
         try:
             if request.path == '/category/horror/':
-                films = Film.objects.filter(genres__name='ترسناک')
+                films = Film.objects.filter(genres__name='horror')
             elif request.path == '/category/action/':
-                films = Film.objects.filter(genres__name='اکشن')
+                films = Film.objects.filter(genres__name='action')
             elif request.path == '/category/comedy/':
-                films = Film.objects.filter(genres__name='کمدی')
+                films = Film.objects.filter(genres__name='comedy')
             elif request.path == '/category/fantasy/':
-                films = Film.objects.filter(genres__name='فانتزی')
+                films = Film.objects.filter(genres__name='fantasy')
             elif request.path == '/category/drum/':
-                films = Film.objects.filter(genres__name='درام')
+                films = Film.objects.filter(genres__name='drum')
         except Film.DoesNotExist:
             return Response({'message': '404 not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = FilmSerializer(films, many=True)
@@ -116,3 +116,10 @@ class LogoutJWT(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class Arrival(APIView):
+    def get(self, request):
+        films = Film.objects.filter(id__lt=6)
+        serializer = ArrivalSerializer(films, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
