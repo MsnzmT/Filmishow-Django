@@ -61,9 +61,9 @@ class FilmSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Film
-        fields = ('id', 'pName', 'eName', 'summary', 'genres', 'directors', 'actors', 'score', 'average_people', 'time',
+        fields = ('id', 'pName', 'eName', 'summary', 'genres', 'directors', 'actors', 'score', 'average_people','like','dislike', 'time',
                   'language', 'countries',
-                  'yearOfPublication', 'photo', 'comments', 'group')
+                  'yearOfPublication', 'photo', 'comments', 'group', 'trailer', 'subtitle', 'poster', 'double')
 
 
 class IdSerializer(serializers.Serializer):
