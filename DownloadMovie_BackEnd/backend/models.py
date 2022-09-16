@@ -55,20 +55,26 @@ class Film(models.Model):
     # - - - - - Attributes - - - - -
     pName = models.CharField(max_length=30)
     eName = models.CharField(max_length=30, null=True)
-    summary = models.TextField(max_length=200)
+    summary = models.TextField(max_length=2000, null=True)
+    about = models.TextField(max_length=2000, null=True)
     genres = models.ManyToManyField(Genre, related_name='genres')
     directors = models.CharField(max_length=500)
     actors = models.CharField(max_length=500)
     score = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)])
     average_people = models.IntegerField(null=True)
+    like = models.IntegerField(null=True)
+    dislike = models.IntegerField(null=True)
     time = models.IntegerField(null=True)
     language = models.ManyToManyField(Language, related_name='language')
     countries = models.ManyToManyField(Country, related_name='countries')
     yearOfPublication = models.IntegerField(validators=[MinValueValidator(1000), MaxValueValidator(2022)])
     # photo = models.ImageField(null=True, blank=True, upload_to="MoviesPictures/")
     photo = models.CharField(max_length=800, null=True, blank=True)
+    trailer = models.CharField(max_length=800, null=True)
+    poster = models.CharField(max_length=800, null=True)
+    subtitle = models.BooleanField(null=True)
+    double = models.BooleanField(null=True)
     group = models.CharField(max_length=100, choices=GROUP_CHOICES, null=True)
-
 
     def __str__(self):
         return f'{self.eName}'
@@ -82,3 +88,10 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.commenter} comments on {self.film}'
+
+
+class ArrivalFilm(models.Model):
+    film = models.OneToOneField(Film, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.film.eName}'

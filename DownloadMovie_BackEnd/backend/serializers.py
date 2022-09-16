@@ -72,5 +72,5 @@ class IdSerializer(serializers.Serializer):
 
 class ArrivalSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Film
-        fields = ('id', 'eName', 'photo', 'score', 'group')
+        model = ArrivalFilm
+        fields = '__all__'

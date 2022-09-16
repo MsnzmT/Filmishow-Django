@@ -6,6 +6,7 @@ from .serializers import *
 from .models import *
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.http import HttpResponse
 
 
 class SignUp(APIView):
@@ -120,6 +121,6 @@ class LogoutJWT(APIView):
 
 class Arrival(APIView):
     def get(self, request):
-        films = Film.objects.filter(id__lt=6)
+        films = ArrivalFilm.objects.all()
         serializer = ArrivalSerializer(films, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

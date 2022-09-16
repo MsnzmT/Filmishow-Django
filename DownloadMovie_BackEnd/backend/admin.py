@@ -67,3 +67,8 @@ class UserAdmin(DefaultUserAdmin):
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
     list_display = ('name', 'title')
+
+
+@admin.register(ArrivalFilm)
+class ArrivalAdmin(admin.ModelAdmin):
+    pass
