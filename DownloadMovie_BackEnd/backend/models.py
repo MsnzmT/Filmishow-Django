@@ -95,3 +95,9 @@ class ArrivalFilm(models.Model):
 
     def __str__(self):
         return f'{self.film.eName}'
+
+
+class EmailVerification(models.Model):
+    email = models.EmailField()
+    token = models.CharField(max_length=200)
+    is_verified = models.BooleanField(default=False)

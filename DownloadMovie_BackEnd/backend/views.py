@@ -7,6 +7,10 @@ from .models import *
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import HttpResponse
+from rest_framework.generics import CreateAPIView
+from rest_framework.decorators import api_view, permission_classes
+from random import randint
+from django.core.mail import send_mail
 
 
 class SignUp(APIView):
@@ -124,3 +128,16 @@ class Arrival(APIView):
         films = ArrivalFilm.objects.all()
         serializer = ArrivalSerializer(films, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class LikeComment(APIView):
+    def post(self, request):
+        pass
+
+
+class EmailVerification(CreateAPIView):
+    serializer_class = EmailSerializer
+
+
+class CodeValidate(CreateAPIView):
+    serializer_class = EmailCodeSerializer
