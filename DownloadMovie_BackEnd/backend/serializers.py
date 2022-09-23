@@ -52,7 +52,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('id', 'text', 'date', 'commenter')
+        fields = ('id', 'text', 'date', 'commenter', 'like', 'dislike')
 
 
 class FilmSerializer(serializers.ModelSerializer):

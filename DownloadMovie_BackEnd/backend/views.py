@@ -131,8 +131,23 @@ class Arrival(APIView):
 
 
 class LikeComment(APIView):
-    def post(self, request):
-        pass
+    permission_classes = [IsAuthenticated, ]
+
+    def post(self, request, comment_id):
+        liked_comments = CommentLike.objects.filter(comment_id=comment_id).filter(user_id=request.user.id)
+        if not liked_comments.exists():
+            comment1 = get_object_or_404(Comment, id=comment_id)
+            comment1.like += 1
+            comment1.save()
+            like = CommentLike()
+            like.user_id = request.user.id
+            like.comment_id = comment_id
+            like.save()
+            return Response(status=status.HTTP_200_OK)
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 class EmailVerification(CreateAPIView):
