@@ -62,8 +62,8 @@ class Film(models.Model):
     actors = models.CharField(max_length=500)
     score = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)])
     average_people = models.IntegerField(null=True)
-    like = models.IntegerField(null=True)
-    dislike = models.IntegerField(null=True)
+    like = models.IntegerField(null=True, default=0)
+    dislike = models.IntegerField(null=True, default=0)
     time = models.IntegerField(null=True)
     language = models.ManyToManyField(Language, related_name='language')
     countries = models.ManyToManyField(Country, related_name='countries')
@@ -85,6 +85,8 @@ class Comment(models.Model):
     film = models.ForeignKey(Film, on_delete=models.CASCADE, null=True, related_name='comments')
     text = models.TextField()
     date = models.DateTimeField(default=timezone.now)
+    like = models.IntegerField(default=0, null=True)
+    dislike = models.IntegerField(default=0, null=True)
 
     def __str__(self):
         return f'{self.commenter} comments on {self.film}'
@@ -95,3 +97,15 @@ class ArrivalFilm(models.Model):
 
     def __str__(self):
         return f'{self.film.eName}'
+
+
+class EmailVerification(models.Model):
+    email = models.EmailField()
+    token = models.CharField(max_length=200)
+    is_verified = models.BooleanField(default=False)
+
+
+class CommentLike(models.Model):
+    comment_id = models.IntegerField()
+    user_id = models.IntegerField()
+

@@ -7,6 +7,10 @@ from .models import *
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import HttpResponse
+from rest_framework.generics import CreateAPIView
+from rest_framework.decorators import api_view, permission_classes
+from random import randint
+from django.core.mail import send_mail
 
 
 class SignUp(APIView):
@@ -124,3 +128,31 @@ class Arrival(APIView):
         films = ArrivalFilm.objects.all()
         serializer = ArrivalSerializer(films, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class LikeComment(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def post(self, request, comment_id):
+        liked_comments = CommentLike.objects.filter(comment_id=comment_id).filter(user_id=request.user.id)
+        if not liked_comments.exists():
+            comment1 = get_object_or_404(Comment, id=comment_id)
+            comment1.like += 1
+            comment1.save()
+            like = CommentLike()
+            like.user_id = request.user.id
+            like.comment_id = comment_id
+            like.save()
+            return Response(status=status.HTTP_200_OK)
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+class EmailVerification(CreateAPIView):
+    serializer_class = EmailSerializer
+
+
+class CodeValidate(CreateAPIView):
+    serializer_class = EmailCodeSerializer

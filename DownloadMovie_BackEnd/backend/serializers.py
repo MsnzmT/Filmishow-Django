@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import *
+from random import randint
+from django.core.mail import send_mail
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -50,7 +52,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('id', 'text', 'date', 'commenter')
+        fields = ('id', 'text', 'date', 'commenter', 'like', 'dislike')
 
 
 class FilmSerializer(serializers.ModelSerializer):
@@ -74,3 +76,29 @@ class ArrivalSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArrivalFilm
         fields = '__all__'
+
+
+class EmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def create(self, validated_data):
+        code = randint(100000, 1000000)
+        send_mail('verification email', str(code), 'filmishow@mahdivakili.ir', [validated_data['email']])
+        return EmailVerification.objects.create(email=validated_data['email'], token=code)
+
+
+class EmailCodeSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    token = serializers.CharField()
+
+    def validate(self, data):
+        v = EmailVerification.objects.filter(email=data['email'], token=data['token'], is_verified=False)
+        if not v.exists():
+            raise serializers.ValidationError({'کد اشتباه است !'})
+        return data
+
+    def create(self, data):
+        v = EmailVerification.objects.get(email=data['email'], token=data['token'])
+        v.is_verified = True
+        v.save()
+        return v

@@ -72,3 +72,8 @@ class CountryAdmin(admin.ModelAdmin):
 @admin.register(ArrivalFilm)
 class ArrivalAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(CommentLike)
+class LikeAdmin(admin.ModelAdmin):
+    pass
