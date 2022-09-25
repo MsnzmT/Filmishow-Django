@@ -43,5 +43,6 @@ urlpatterns = [
     path('arrival/', Arrival.as_view()),
     path('comment/like/<int:comment_id>/', LikeComment.as_view()),
     path('email/', EmailVerification.as_view()),
-    path('email/validation/', CodeValidate.as_view())
+    path('email/validation/', CodeValidate.as_view()),
+    path('comment/dislike/<int:comment_id>/', DislikeComment.as_view())
 ]

@@ -72,7 +72,15 @@ class IdSerializer(serializers.Serializer):
     id = serializers.IntegerField()
 
 
+class FilmSerializer2(serializers.ModelSerializer):
+    class Meta:
+        model = Film
+        fields = ('id', 'eName', 'score', 'group', 'photo')
+
+
 class ArrivalSerializer(serializers.ModelSerializer):
+    film = FilmSerializer2(read_only=True)
+
     class Meta:
         model = ArrivalFilm
         fields = '__all__'
