@@ -93,7 +93,7 @@ class Comment(models.Model):
 
 
 class ArrivalFilm(models.Model):
-    film = models.OneToOneField(Film, on_delete=models.CASCADE)
+    film = models.OneToOneField(Film, on_delete=models.CASCADE, related_name='film')
 
     def __str__(self):
         return f'{self.film.eName}'
@@ -109,3 +109,13 @@ class CommentLike(models.Model):
     comment_id = models.IntegerField()
     user_id = models.IntegerField()
 
+    def __str__(self):
+        return f'Comment_id : {self.comment_id} | User_id : {self.user_id}'
+
+
+class CommentDislike(models.Model):
+    comment_id = models.IntegerField()
+    user_id = models.IntegerField()
+
+    def __str__(self):
+        return f'Comment_id : {self.comment_id} | User_id : {self.user_id}'

@@ -134,8 +134,9 @@ class LikeComment(APIView):
     permission_classes = [IsAuthenticated, ]
 
     def post(self, request, comment_id):
-        liked_comments = CommentLike.objects.filter(comment_id=comment_id).filter(user_id=request.user.id)
-        if not liked_comments.exists():
+        liked_comment = CommentLike.objects.filter(comment_id=comment_id).filter(user_id=request.user.id)
+        disliked_comment = CommentDislike.objects.filter(comment_id=comment_id).filter(user_id=request.user.id)
+        if (not liked_comment.exists()) and (not disliked_comment.exists()):
             comment1 = get_object_or_404(Comment, id=comment_id)
             comment1.like += 1
             comment1.save()
@@ -144,10 +145,18 @@ class LikeComment(APIView):
             like.comment_id = comment_id
             like.save()
             return Response(status=status.HTTP_200_OK)
+        elif (not liked_comment.exists()) and (disliked_comment.exists()):
+            comment2 = get_object_or_404(Comment, id=comment_id)
+            comment2.dislike -= 1
+            comment2.like += 1
+            comment2.save()
+            like = CommentLike()
+            disliked_comment.delete()
+            like.user_id = request.user.id
+            like.comment_id = comment_id
+            like.save()
+            return Response(status=status.HTTP_200_OK)
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
-
-
-
 
 
 class EmailVerification(CreateAPIView):
@@ -156,3 +165,33 @@ class EmailVerification(CreateAPIView):
 
 class CodeValidate(CreateAPIView):
     serializer_class = EmailCodeSerializer
+
+
+class DislikeComment(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def post(self, request, comment_id):
+        liked_comment = CommentLike.objects.filter(comment_id=comment_id).filter(user_id=request.user.id)
+        disliked_comment = CommentDislike.objects.filter(comment_id=comment_id).filter(user_id=request.user.id)
+
+        if (not liked_comment.exists()) and (not disliked_comment.exists()):
+            comment1 = get_object_or_404(Comment, id=comment_id)
+            comment1.dislike += 1
+            comment1.save()
+            like = CommentDislike()
+            like.user_id = request.user.id
+            like.comment_id = comment_id
+            like.save()
+            return Response(status=status.HTTP_200_OK)
+        elif (liked_comment.exists()) and (not disliked_comment.exists()):
+            comment2 = get_object_or_404(Comment, id=comment_id)
+            comment2.dislike += 1
+            comment2.like -= 1
+            comment2.save()
+            like = CommentDislike()
+            liked_comment.delete()
+            like.user_id = request.user.id
+            like.comment_id = comment_id
+            like.save()
+            return Response(status=status.HTTP_200_OK)
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)

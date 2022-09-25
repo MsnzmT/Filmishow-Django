@@ -77,3 +77,8 @@ class ArrivalAdmin(admin.ModelAdmin):
 @admin.register(CommentLike)
 class LikeAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(CommentDislike)
+class DislikeAdmin(admin.ModelAdmin):
+    pass
