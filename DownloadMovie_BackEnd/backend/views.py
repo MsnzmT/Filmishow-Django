@@ -24,6 +24,9 @@ class SignUp(APIView):
         full_name = request.data['full_name']
         # country = request.data['country']
         # phone_number = request.data['phone_number']
+        users = CustomUser.objects.filter(username=username)
+        if users.exists():
+            return Response(status=status.HTTP_409_CONFLICT)
         if pass2 != pass1:
             return Response({'message': 'Entered passwords are not identical'}, status=status.HTTP_400_BAD_REQUEST)
         else:
