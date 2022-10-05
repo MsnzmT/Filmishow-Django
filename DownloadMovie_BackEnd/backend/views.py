@@ -11,6 +11,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.decorators import api_view, permission_classes
 from random import randint
 from django.core.mail import send_mail
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 class SignUp(APIView):
@@ -19,11 +20,7 @@ class SignUp(APIView):
         pass1 = request.data['password1']
         pass2 = request.data['password2']
         email = request.data['email']
-        # first_name = request.data['first_name']
-        # last_name = request.data['last_name']
         full_name = request.data['full_name']
-        # country = request.data['country']
-        # phone_number = request.data['phone_number']
         users = CustomUser.objects.filter(username=username)
         if users.exists():
             return Response(status=status.HTTP_409_CONFLICT)
@@ -33,14 +30,6 @@ class SignUp(APIView):
             CustomUser.objects.create_user(username=username, password=pass1, email=email,
                                            full_name=full_name)
             return Response({'message': 'User created successfully!'}, status=status.HTTP_201_CREATED)
-
-
-class LogOut(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def post(self, requset):
-        requset.user.auth_token.delete()
-        return Response({'message': 'Logged out successfully!'}, status=status.HTTP_200_OK)
 
 
 class AllFilms(APIView):
@@ -198,3 +187,7 @@ class DislikeComment(APIView):
             like.save()
             return Response(status=status.HTTP_200_OK)
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
