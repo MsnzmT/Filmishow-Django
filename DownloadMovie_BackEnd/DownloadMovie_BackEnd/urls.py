@@ -25,8 +25,6 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('signup/', SignUp.as_view()),
-    # path('login/', obtain_auth_token),
-    # path('logout/', LogOut.as_view()),
     path('home/', AllFilms.as_view()),
     path('upload-film/', UploadFilm.as_view()),
     path('comment/<int:film_id>/', AddComment.as_view()),
@@ -37,7 +35,7 @@ urlpatterns = [
     path('category/comedy/', FilterFilms.as_view()),
     path('search/', SearchFilmName.as_view()),
     path('film/<int:film_id>/', SearchFilmId.as_view()),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/logout/', LogoutJWT.as_view()),
     path('arrival/', Arrival.as_view()),

@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import *
 from random import randint
 from django.core.mail import send_mail
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -110,3 +111,15 @@ class EmailCodeSerializer(serializers.Serializer):
         v.is_verified = True
         v.save()
         return v
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        refresh = self.get_token(self.user)
+
+        # Add extra responses here
+        data['full_name'] = self.user.full_name
+        data['email'] = self.user.email
+        data['is_superuser'] = self.user.is_superuser
+        return data
