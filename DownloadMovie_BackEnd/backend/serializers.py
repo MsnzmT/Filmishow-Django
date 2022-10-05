@@ -114,12 +114,10 @@ class EmailCodeSerializer(serializers.Serializer):
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        data = super().validate(attrs)
-        refresh = self.get_token(self.user)
-
-        # Add extra responses here
-        data['full_name'] = self.user.full_name
-        data['email'] = self.user.email
-        data['is_superuser'] = self.user.is_superuser
-        return data
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['full_name'] = user.last_name
+        token['username'] = user.username
+        token['is_superuser'] = user.is_superuser
+        return token
