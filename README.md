@@ -1,8 +1,18 @@
-# Filmi Show
+# Filmi Show - Backend
 
 ## A platform for downloading movies, series, etc.
 
 It's not completed yet and I will push new changes soon.
+
+## Start project
+
+### `pip install -r requirements.txt`
+
+To install requirements of this project.
+
+### `python manage.py runserver`
+
+Runs the appin the development mode at [http://localhost:3000](http://localhost:3000) .
 
 ## ** Frontend **
 
