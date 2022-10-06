@@ -163,4 +163,12 @@ EMAIL_HOST_PASSWORD = '[rHgyT_Rv))C'
 
 EMAIL_USE_SSL = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_USE_TLS = False
+
+DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
+    "CLASS": "django_rest_passwordreset.tokens.RandomNumberTokenGenerator",
+    "OPTIONS": {
+        "min_number": 100000,
+        "max_number": 1000000
+    }
+}
