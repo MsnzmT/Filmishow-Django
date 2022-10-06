@@ -87,3 +87,13 @@ class DislikeAdmin(admin.ModelAdmin):
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(FilmLike)
+class FilmLikeAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(FilmDislike)
+class FilmDislikeAdmin(admin.ModelAdmin):
+    pass
