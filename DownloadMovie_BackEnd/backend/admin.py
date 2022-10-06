@@ -84,6 +84,6 @@ class DislikeAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
     pass

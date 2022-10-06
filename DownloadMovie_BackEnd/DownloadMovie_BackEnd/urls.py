@@ -40,4 +40,6 @@ urlpatterns = [
     path('email/validation/', CodeValidate.as_view()),
     path('comment/dislike/<int:comment_id>/', DislikeComment.as_view()),
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
+    path('add-favorite/<film_id>/', AddFavorite.as_view()),
+    path('favorites/', GetFavorites.as_view()),
 ]

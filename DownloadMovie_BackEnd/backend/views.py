@@ -26,7 +26,6 @@ class SignUp(APIView):
         else:
             CustomUser.objects.create_user(username=username, password=pass1, email=email,
                                            full_name=full_name)
-            Profile.objects.create(user=CustomUser.objects.get(username=username))
             return Response({'message': 'User created successfully!'}, status=status.HTTP_201_CREATED)
 
 
@@ -190,4 +189,23 @@ class DislikeComment(APIView):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
+
+class AddFavorite(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request, film_id):
+        favorite = Favorite()
+        favorite.user_id = request.user.id
+        favorite.film_id = film_id
+        favorite.save()
+        return Response(status=status.HTTP_200_OK)
+
+
+class GetFavorites(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request):
+        film_ids = Favorite.objects.filter(user_id=request.user.id)
+        serializer = FavoriteSerializer(film_ids, many=True)
+        return Response(serializer.data)
 

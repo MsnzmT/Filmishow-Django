@@ -121,12 +121,12 @@ class CommentDislike(models.Model):
         return f'Comment_id : {self.comment_id} | User_id : {self.user_id}'
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='user')
-    favorites = models.ManyToManyField(Film,null=True)
+class Favorite(models.Model):
+    user_id = models.IntegerField()
+    film_id = models.IntegerField()
 
     def __str__(self):
-        return f'{self.user.username}'
+        return f'user_id : {self.user_id} | film_id : {self.film_id}'
 
 
 @receiver(reset_password_token_created)
