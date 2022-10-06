@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
+    'django_rest_passwordreset',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,5 @@ EMAIL_HOST_USER = 'filmishow@mahdivakili.ir'
 EMAIL_HOST_PASSWORD = '[rHgyT_Rv))C'
 
 EMAIL_USE_SSL = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

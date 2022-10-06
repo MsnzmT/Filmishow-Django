@@ -82,3 +82,8 @@ class LikeAdmin(admin.ModelAdmin):
 @admin.register(CommentDislike)
 class DislikeAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    pass

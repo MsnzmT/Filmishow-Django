@@ -14,13 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from backend.views import *
-from rest_framework.authtoken.views import obtain_auth_token
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -42,5 +38,6 @@ urlpatterns = [
     path('comment/like/<int:comment_id>/', LikeComment.as_view()),
     path('email/', EmailVerification.as_view()),
     path('email/validation/', CodeValidate.as_view()),
-    path('comment/dislike/<int:comment_id>/', DislikeComment.as_view())
+    path('comment/dislike/<int:comment_id>/', DislikeComment.as_view()),
+    path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 ]
