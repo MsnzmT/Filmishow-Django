@@ -8,9 +8,6 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import HttpResponse
 from rest_framework.generics import CreateAPIView
-from rest_framework.decorators import api_view, permission_classes
-from random import randint
-from django.core.mail import send_mail
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 
@@ -29,6 +26,7 @@ class SignUp(APIView):
         else:
             CustomUser.objects.create_user(username=username, password=pass1, email=email,
                                            full_name=full_name)
+            Profile.objects.create(user=CustomUser.objects.get(username=username))
             return Response({'message': 'User created successfully!'}, status=status.HTTP_201_CREATED)
 
 
@@ -191,3 +189,5 @@ class DislikeComment(APIView):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+
