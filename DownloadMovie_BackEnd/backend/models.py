@@ -124,6 +124,9 @@ class CommentDislike(models.Model):
 class Favorite(models.Model):
     user_id = models.IntegerField()
     film_id = models.IntegerField()
+    film_pName = models.CharField(max_length=200, null=True)
+    film_eName = models.CharField(max_length=200, null=True)
+    film_photo = models.CharField(max_length=900, null=True)
 
     def __str__(self):
         return f'user_id : {self.user_id} | film_id : {self.film_id}'
@@ -142,3 +145,19 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
         # to:
         [reset_password_token.user.email]
     )
+
+
+class FilmLike(models.Model):
+    film_id = models.IntegerField()
+    user_id = models.IntegerField()
+
+    def __str__(self):
+        return f'Film_id : {self.film_id} | User_id : {self.user_id}'
+
+
+class FilmDislike(models.Model):
+    film_id = models.IntegerField()
+    user_id = models.IntegerField()
+
+    def __str__(self):
+        return f'Film_id : {self.film_id} | User_id : {self.user_id}'

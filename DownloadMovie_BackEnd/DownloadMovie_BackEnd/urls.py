@@ -42,4 +42,6 @@ urlpatterns = [
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
     path('add-favorite/<film_id>/', AddFavorite.as_view()),
     path('favorites/', GetFavorites.as_view()),
+    path('film/like/<int:film_id>/', LikeFilm.as_view()),
+    path('film/dislike/<int:film_id>/', DislikeFilm.as_view()),
 ]

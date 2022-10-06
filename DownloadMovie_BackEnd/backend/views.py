@@ -193,10 +193,14 @@ class MyTokenObtainPairView(TokenObtainPairView):
 class AddFavorite(APIView):
     permission_classes = [IsAuthenticated, ]
 
-    def get(self, request, film_id):
+    def post(self, request, film_id):
+        film = get_object_or_404(Film, id=film_id)
         favorite = Favorite()
         favorite.user_id = request.user.id
         favorite.film_id = film_id
+        favorite.film_eName = film.eName
+        favorite.film_pName = film.pName
+        favorite.film_photo = film.photo
         favorite.save()
         return Response(status=status.HTTP_200_OK)
 
@@ -209,3 +213,60 @@ class GetFavorites(APIView):
         serializer = FavoriteSerializer(film_ids, many=True)
         return Response(serializer.data)
 
+
+class LikeFilm(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def post(self, request, film_id):
+        liked_film = FilmLike.objects.filter(film_id=film_id).filter(user_id=request.user.id)
+        disliked_film = FilmDislike.objects.filter(film_id=film_id).filter(user_id=request.user.id)
+        if (not liked_film.exists()) and (not disliked_film.exists()):
+            film1 = get_object_or_404(Film, id=film_id)
+            film1.like += 1
+            film1.save()
+            like = FilmLike()
+            like.user_id = request.user.id
+            like.film_id = film_id
+            like.save()
+            return Response(status=status.HTTP_200_OK)
+        elif (not liked_film.exists()) and (disliked_film.exists()):
+            film2 = get_object_or_404(Film, id=film_id)
+            film2.dislike -= 1
+            film2.like += 1
+            film2.save()
+            like = FilmLike()
+            disliked_film.delete()
+            like.user_id = request.user.id
+            like.film_id = film_id
+            like.save()
+            return Response(status=status.HTTP_200_OK)
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
+class DislikeFilm(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def post(self, request, film_id):
+        liked_film = FilmLike.objects.filter(film_id=film_id).filter(user_id=request.user.id)
+        disliked_film = FilmDislike.objects.filter(film_id=film_id).filter(user_id=request.user.id)
+        if (not liked_film.exists()) and (not disliked_film.exists()):
+            film1 = get_object_or_404(Film, id=film_id)
+            film1.dislike += 1
+            film1.save()
+            dislike = FilmDislike()
+            dislike.user_id = request.user.id
+            dislike.film_id = film_id
+            dislike.save()
+            return Response(status=status.HTTP_200_OK)
+        elif (liked_film.exists()) and (not disliked_film.exists()):
+            film2 = get_object_or_404(Film, id=film_id)
+            film2.dislike += 1
+            film2.like -= 1
+            film2.save()
+            like = FilmDislike()
+            liked_film.delete()
+            like.user_id = request.user.id
+            like.film_id = film_id
+            like.save()
+            return Response(status=status.HTTP_200_OK)
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
