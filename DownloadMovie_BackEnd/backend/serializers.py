@@ -126,4 +126,4 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorite
-        fields = ('film_id', 'film_eName', 'film_pName', 'film_photo')
+        fields = ('film_id', 'film_eName', 'film_photo', 'film_group')

@@ -195,12 +195,17 @@ class AddFavorite(APIView):
 
     def post(self, request, film_id):
         film = get_object_or_404(Film, id=film_id)
+        favorited_film = Favorite.objects.filter(user_id=request.user.id).filter(film_id=film_id)
+        if favorited_film.exists():
+            favorited_film.delete()
+            return Response(status.HTTP_205_RESET_CONTENT)
         favorite = Favorite()
         favorite.user_id = request.user.id
         favorite.film_id = film_id
         favorite.film_eName = film.eName
         favorite.film_pName = film.pName
         favorite.film_photo = film.photo
+        favorite.film_group = film.group
         favorite.save()
         return Response(status=status.HTTP_200_OK)
 

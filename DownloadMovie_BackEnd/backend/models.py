@@ -127,6 +127,7 @@ class Favorite(models.Model):
     film_pName = models.CharField(max_length=200, null=True)
     film_eName = models.CharField(max_length=200, null=True)
     film_photo = models.CharField(max_length=900, null=True)
+    film_group = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return f'user_id : {self.user_id} | film_id : {self.film_id}'
