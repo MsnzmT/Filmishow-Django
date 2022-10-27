@@ -2,7 +2,7 @@
 
 ## A platform for downloading movies, series, etc.
 
-[filmishow.vercel.app](filmishow.vercel.app)
+[filmishow.vercel.app](https://filmishow.vercel.app)
 
 ## Start project
 
