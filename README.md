@@ -2,7 +2,7 @@
 
 ## A platform for downloading movies, series, etc.
 
-It's not completed yet and I will push new changes soon.
+filmishow.vercel.app
 
 ## Start project
 
